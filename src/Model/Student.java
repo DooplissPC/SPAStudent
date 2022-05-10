@@ -5,27 +5,28 @@ package Model;
  * @author rorys
  */
 public class Student {
-    private Project prefList[];
+    private Project prefs[];
     private long id;
     private String name;
 
-    public Student(long id, String name){
+    public Student(Project prefs[], long id, String name){
 
     }
 
-    public Project[] getPrefList() {
-        return prefList;
+    public Project[] getPrefs() {
+        return prefs;
     }
 
-    public void setPrefList(Project[] prefList) {
-        this.prefList = prefList;
+    public void setPrefs(Project[] prefList) {
+        this.prefs = prefList;
     }
 
     public long getId() {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public String getName() {
+        return name;
     }
+
 }
