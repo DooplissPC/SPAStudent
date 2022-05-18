@@ -2,13 +2,14 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -35,9 +36,6 @@
         </menus>
       </MenuBar>
    </top>
-   <left>
-      <TreeView prefWidth="200.0" BorderPane.alignment="CENTER" />
-   </left>
    <center>
       <TableView BorderPane.alignment="CENTER">
         <columns>
@@ -50,7 +48,7 @@
    <bottom>
       <HBox BorderPane.alignment="CENTER">
          <children>
-            <HBox prefHeight="100.0" prefWidth="200.0" />
+            <HBox prefWidth="100.0" />
             <VBox spacing="2.0">
                <children>
                   <Button mnemonicParsing="false" text="+ Add Student" />
@@ -66,11 +64,39 @@
       </HBox>
    </bottom>
    <right>
-      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+      <VBox prefHeight="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Label prefHeight="25.0" text="New Student" />
-            <Button mnemonicParsing="false" text="testing moving scene" />
+            <Label prefHeight="25.0" text="New Student">
+               <VBox.margin>
+                  <Insets top="24.0" />
+               </VBox.margin></Label>
+            <Label prefHeight="25.0" text="Name:" />
+            <TextField />
+            <Label prefHeight="25.0" text="ID:" />
+            <TextField />
+            <Label prefHeight="25.0" text="Prerences" />
+            <ChoiceBox prefWidth="150.0" />
+            <Button mnemonicParsing="false" text="Add a project to preferences" />
+            <Button mnemonicParsing="false" text="Confirm Student">
+               <VBox.margin>
+                  <Insets top="48.0" />
+               </VBox.margin>
+            </Button>
          </children>
       </VBox>
    </right>
+   <left>
+      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button defaultButton="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="117.0" text="Students">
+               <VBox.margin>
+                  <Insets top="24.0" />
+               </VBox.margin>
+            </Button>
+            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="117.0" text="Projects" />
+            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="117.0" text="Lecturers" />
+            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="117.0" text="Matching" />
+         </children>
+      </VBox>
+   </left>
 </BorderPane>
