@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TreeView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Setting">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+   <left>
+      <TreeView prefWidth="200.0" BorderPane.alignment="CENTER" />
+   </left>
+   <center>
+      <TableView BorderPane.alignment="CENTER">
+        <columns>
+          <TableColumn prefWidth="100.0" text="Name" />
+          <TableColumn prefWidth="64.0" text="ID" />
+            <TableColumn prefWidth="280.0" text="Preferences" />
+        </columns>
+      </TableView>
+   </center>
+   <bottom>
+      <HBox BorderPane.alignment="CENTER">
+         <children>
+            <HBox prefHeight="100.0" prefWidth="200.0" />
+            <VBox spacing="2.0">
+               <children>
+                  <Button mnemonicParsing="false" text="+ Add Student" />
+                  <Button mnemonicParsing="false" text="- Delete Student" />
+                  <Button mnemonicParsing="false" text="Edit Student" />
+                  <Button mnemonicParsing="false" text="Load Students From File" />
+               </children>
+               <HBox.margin>
+                  <Insets top="2.0" />
+               </HBox.margin>
+            </VBox>
+         </children>
+      </HBox>
+   </bottom>
+   <right>
+      <VBox prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label prefHeight="25.0" text="New Student" />
+            <Button mnemonicParsing="false" text="testing moving scene" />
+         </children>
+      </VBox>
+   </right>
+</BorderPane>

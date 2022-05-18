@@ -7,9 +7,9 @@ package Model;
 public class Project {
     private Student projectedPrefs[];
     private Lecturer lecturer;
-    private long id;
-
-    public Project(Lecturer lecturer, long id) {
+    private int id;
+    private int capacity;
+    public Project(Lecturer lecturer, int id) {
         this.lecturer = lecturer;
         this.id = id;
     }
