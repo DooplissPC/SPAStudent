@@ -7,7 +7,7 @@ package Model;
 public class Project {
     private Student projectedPrefs[];
     private Lecturer lecturer;
-    private int id;
+    private final int id;
     private int capacity;
     public Project(Lecturer lecturer, int id) {
         this.lecturer = lecturer;
