@@ -33,41 +33,47 @@ public class Lecturer {
     public boolean isOverSubscribed(){
         return this.capacity > this.maxCapacity;
     }
-    public Student unassignStudent(Student student){//should be run alongside unassignProject
-        Student worstStudent;
-        if (this.capacity > this.maxCapacity) {
-            int i = this.prefs.size();
-            while(i >=0){
-                Student currentStudent = this.prefs.get(i);
-                if(currentStudent.getAssignedProject().getId() == this.id){
-                    worstStudent = currentStudent.unassignProject();
-                    this.capacity--;
-                    return false;
-                }else{
-                    i--;
-                }
+    public void decrementCapacity(){
+        this.capacity--;
+    }
+    public Student unassignStudent() {//should be run alongside unassignProject
+        Student worstStudent = null;
+        Project worstStudentProject;
+        ListIterator<Student> it = this.prefs.listIterator(this.prefs.size());
+        while (it.hasPrevious()&&this.capacity>this.maxCapacity) {
+            Student currentStudent = it.previous();
+            if (currentStudent.hasAssignedProject() && currentStudent.getAssignedProject().getLecturer().getId() == this.id) {//&& for short circuit evaluation
+                this.capacity--;
+                worstStudentProject = currentStudent.unassignProject();
+                worstStudent = currentStudent;
+                worstStudentProject.decrementCapacity();
             }
         }
+        return worstStudent;
     }
     /**
      * Deletes this lecturer's projects from all incompatible student's preference lists, as well from this lecturer's project's projected preference list. Will throw an exception if this method
      * is run before this lecturer is at capacity.
-     * @throws Exception
+     * @throws Exception if accessed when lecturer is not at capacity
      */
-    public ArrayList<Student> deleteWorstStudents() {
-        ArrayList<Student> removedStudents = new ArrayList<Student>();
+    public ArrayList<Student> deleteWorstStudents() throws Exception {
+        ArrayList<Student> removedStudents = new ArrayList<>();
         ListIterator<Student> it = this.prefs.listIterator(this.prefs.size());
-        while(it.hasPrevious()){
-            Student currentStudent = it.previous();
-            if (currentStudent.getAssignedProject() != null && currentStudent.getAssignedProject().getLecturer().getId() == this.id) {//&& for short circuit evaluation
-                break;
-            } else {
-                currentStudent.getAssignedProject().deleteStudent(currentStudent);//delete student from project preflist
-                currentStudent.deleteLecturer(this);//delete all projects from this lecturer in student preflist
-                removedStudents.add(currentStudent);//add to list of removed students
-                it.remove();//remove
+            if (this.capacity == this.maxCapacity) {
+                while (it.hasPrevious()) {
+                    Student currentStudent = it.previous();
+                    if (currentStudent.hasAssignedProject() && currentStudent.getAssignedProject().getLecturer().getId() == this.id) {//&& for short circuit evaluation
+                        break;
+                    } else {
+                        currentStudent.getAssignedProject().deleteStudent(currentStudent);//delete student from project preflist
+                        currentStudent.deleteLecturer(this);//delete all projects from this lecturer in student preflist
+                        removedStudents.add(currentStudent);//add to list of removed students
+                        it.remove();//remove
+                    }
+                }
+            }else{
+                throw new Exception("delete method has been accessed when lecturer" + this.id + "was not at capacity");
             }
-        }
         return removedStudents;
     }
     public boolean isFull(){

@@ -11,8 +11,6 @@ import java.util.ListIterator;
  */
 public class Project {
     private ArrayList<Student> projectedPrefs;
-    //private ArrayList<Student> assignedStudents;
-    //private int lastStudent;
     private Lecturer lecturer;
     private int lecturerId;
     private final int id;
@@ -44,13 +42,21 @@ public class Project {
             this.projectedPrefs.add(student);
             //this.lastPref++;
         }
+        this.lecturer.assignStudent(student);
     }
-    public void unassignWorstStudent(){
+    public Student unassignStudent() {
         ListIterator<Student> it = this.projectedPrefs.listIterator(this.projectedPrefs.size());
-        while(it.hasPrevious()){
-
+        Student worstStudent = null;
+        while (it.hasPrevious()&&this.capacity>this.maxCapacity) {
+            Student currentStudent = it.previous();
+            if (currentStudent.hasAssignedProject() && currentStudent.getAssignedProject().getId() == this.id) {//&& for short circuit evaluation
+                this.capacity--;
+                currentStudent.unassignProject();
+                worstStudent = currentStudent;
+                this.lecturer.decrementCapacity();
+            }
         }
-        this.capacity--;
+        return worstStudent;
     }
     public boolean isOversubscribed(){
         return this.capacity > this.maxCapacity;
@@ -63,12 +69,12 @@ public class Project {
     }
 
     public ArrayList<Student> deleteWorstStudents() throws Exception {
-        ArrayList<Student> removedStudents = new ArrayList<Student>();
+        ArrayList<Student> removedStudents = new ArrayList<>();
         if (this.capacity == this.maxCapacity) {
             ListIterator<Student> it = this.projectedPrefs.listIterator(this.projectedPrefs.size());
             while(it.hasPrevious()){
                 Student currentStudent = it.previous();
-                if (currentStudent.getAssignedProject() != null && currentStudent.getAssignedProject().getId() == this.id) {
+                if (currentStudent.hasAssignedProject() && currentStudent.getAssignedProject().getId() == this.id) {
                     break;
                 } else {
                     this.deleteStudent(currentStudent);//delete student from project preflist
@@ -78,7 +84,7 @@ public class Project {
                 }
             }
         } else {
-            throw new Exception("delete method has been accessed when project" + String.valueOf(this.id) + "was not at capacity");
+            throw new Exception("delete method has been accessed when project" + this.id + "was not at capacity");
         }
         return removedStudents;
     }
@@ -93,5 +99,9 @@ public class Project {
 
     public int getId() {
         return id;
+    }
+
+    public void decrementCapacity() {
+        this.capacity--;
     }
 }
