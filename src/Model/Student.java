@@ -1,9 +1,6 @@
 package Model;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Set;
+import java.util.*;
 
 /**
  *
@@ -37,28 +34,35 @@ public class Student {
             return prevLecturerProject;
         }
     }
-    private Project[] rank;
+    private int[] rank;
     private LinkedList<Project> prefs;
     //private PreferenceNode[] prefs;
-    private int prefsHead; //first Node in prefs, since index can change with deletions
-    private int prefsTail;
     private final int id;
     private String name;
     private Project assignedProject;
 
-    public Student(Project rank[], int id, String name){
-        this.rank = rank;
+    public Student(String name, int id){
+        //this.rank = rank;
         this.id = id;
         this.name = name;
         this.assignedProject = null;
-        this.prefsHead = 0;
-        this.prefsTail = rank.length;
     }
-    public LinkedList<Project> initializePrefs(){
+
+    public void setRank(int[] rank) {
+        this.rank = rank;
+    }
+
+    public LinkedList<Project> initializePrefs(HashMap<Integer, Project> projectMap){
         for (int i = 0; i < this.rank.length; i++) {
-            this.prefs.addFirst(this.rank[i]);
+            //this.prefs.addFirst(this.rank[i]);
+            this.prefs.addFirst(projectMap.get(i));
         }
         return this.prefs;
+    }
+    public Student unassignProject(){
+        Project unassignedProject = this.assignedProject;
+        this.assignedProject = null;
+        return this;
     }
     public Project deleteProject(Project deletedProject){
         this.prefs.remove(deletedProject);
@@ -78,23 +82,33 @@ public class Student {
         return deletedProjects;
     }
 
-    public Set<Project> getAcceptableProjects(){
-        //this.rank
+    public boolean isAcceptable(Project project){
+        int id = project.getId();
+        int i = 0;
+        boolean acceptable = false;
+        while (acceptable == false && i< this.rank.length){
+            if(this.rank[i] == project.getId()){
+                acceptable = true;
+                return acceptable;
+            }else{
+                i++;
+            }
+        }
+        return acceptable;
     }
     public Project getAssignedProject() {
         return assignedProject;
     }
 
-    public void setAssignedProject(Project assignedProject) {
+    public void assignProject(Project assignedProject) {
         this.assignedProject = assignedProject;
     }
-
-    public Project[] getRank() {
-        return rank;
+    public Project getFirstProject(){
+        return this.prefs.pollFirst();
     }
 
-    public void setRank(Project[] prefList) {
-        this.rank = prefList;
+    public int[] getRank() {
+        return rank;
     }
 
     public int getId() {

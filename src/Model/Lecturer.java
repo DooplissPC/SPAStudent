@@ -1,89 +1,104 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.ListIterator;
 
 public class Lecturer {
-    private Student[] prefs;
-    //private ArrayList<Student> prefs;
-    private ArrayList<Student> assignedStudents;
-    private int lastPref; //index of last member of prefs. once capacity is reached, update to worst member
+    private int[] rank;
+    private ArrayList<Student> prefs;
     private final int id;
     private String name;
     private int capacity;
-    public Lecturer(Student [] prefs, int id, String name) {
-        this.prefs = prefs;
+    private int maxCapacity;
+    public Lecturer(String name, int id, int maxCapacity) {
+        this.maxCapacity = maxCapacity;
+        this.capacity = 0;
         this.id = id;
         this.name = name;
-        this.lastPref = prefs.length - 1;
     }
-
-    public Student assignStudent(Student student) {
-        this.assignedStudents.add(student);
-        this.lastPref = this.prefs.length - 1;
-
-        if (this.assignedStudents.size() > capacity){
-            //todo find and unassign worst student
+    public ArrayList<Student> initializePrefs(HashMap<Integer, Student> projectMap) {
+        for (int i = 0; i < this.rank.length; i++) {
+            this.prefs.add(projectMap.get(i));
+        }
+        return this.prefs;
+    }
+    public void assignStudent(Student student){//if false, lecturer is full
+        this.capacity++;
+        if(!prefs.contains(student)){//if student not in prefs, add to end of prefs, and update last pref
+            this.prefs.add(student);
         }
     }
-
-    /**
-     * Deletes all incompatible students from this lecturer's preference list. Will throw an exception if this method
-     * is run before this lecturer is at capacity.
-     * @throws Exception
-     */
-    public ArrayList<Student> deleteWorstStudents() throws Exception {
-        ArrayList<Student> removedStudents = new ArrayList<Student>();
-        if (this.assignedStudents.size() == capacity){
-            int i = prefs.length;
-            while (i >= 0) {
-                if (this.prefs[i].getAssignedProject() != null && prefs.get(i).getAssignedProject().getLecturer().getId() == this.id) { //&& for short circuit evaluation
-                    this.lastPref = i;
-
-                    //Student[] newPrefs = new Student[this.lastPref];
-                    //System.arraycopy(this.prefs, 0, newPrefs, 0, this.lastPref);
-                    //this.prefs = newPrefs;
-                    i = 0;
-                } else {
-                    this.prefs[i].getAssignedProject().deleteStudent();
-                    this.prefs[i].deleteLecturer();
-                    removedStudents.add(this.prefs.remove(i));
-
+    public boolean isOverSubscribed(){
+        return this.capacity > this.maxCapacity;
+    }
+    public Student unassignStudent(Student student){//should be run alongside unassignProject
+        Student worstStudent;
+        if (this.capacity > this.maxCapacity) {
+            int i = this.prefs.size();
+            while(i >=0){
+                Student currentStudent = this.prefs.get(i);
+                if(currentStudent.getAssignedProject().getId() == this.id){
+                    worstStudent = currentStudent.unassignProject();
+                    this.capacity--;
+                    return false;
+                }else{
                     i--;
                 }
             }
-        }else{
-            throw new Exception("delete method has been accessed when lecturer" + String.valueOf(this.id)+ "was not at capacity");
         }
     }
-
-    public void setPrefs(Student[] prefs) {
-        this.prefs = prefs;
+    /**
+     * Deletes this lecturer's projects from all incompatible student's preference lists, as well from this lecturer's project's projected preference list. Will throw an exception if this method
+     * is run before this lecturer is at capacity.
+     * @throws Exception
+     */
+    public ArrayList<Student> deleteWorstStudents() {
+        ArrayList<Student> removedStudents = new ArrayList<Student>();
+        ListIterator<Student> it = this.prefs.listIterator(this.prefs.size());
+        while(it.hasPrevious()){
+            Student currentStudent = it.previous();
+            if (currentStudent.getAssignedProject() != null && currentStudent.getAssignedProject().getLecturer().getId() == this.id) {//&& for short circuit evaluation
+                break;
+            } else {
+                currentStudent.getAssignedProject().deleteStudent(currentStudent);//delete student from project preflist
+                currentStudent.deleteLecturer(this);//delete all projects from this lecturer in student preflist
+                removedStudents.add(currentStudent);//add to list of removed students
+                it.remove();//remove
+            }
+        }
+        return removedStudents;
+    }
+    public boolean isFull(){
+        return this.capacity == this.maxCapacity;
+    }
+    public void setRank ( int[] rank){
+        this.rank = rank;
     }
 
-    public void setName(String name) {
+    public void setName (String name){
         this.name = name;
     }
 
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
+    public void setMaxCapacity ( int capacity){
+        this.maxCapacity = capacity;
     }
 
-    public Student[] getPrefs() {
+    public ArrayList<Student> getPrefs () {
         return prefs;
     }
 
-    public int getId() {
-        return id;
+    public int getId () {
+        return this.id;
     }
 
-    public String getName() {
+    public String getName () {
         return name;
     }
 
-    public int getCapacity() {
-        return capacity;
+    public int getCapacity () {
+        return maxCapacity;
     }
-
-
 
 }
