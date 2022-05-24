@@ -3,11 +3,10 @@ package Model;
 import java.util.*;
 
 /**
- *
+ * Represents a student within an SPA matching. Stores their preference list,
  * @author rorys
  */
 public class Student {
-
     private int[] rank;
     private LinkedList<Project> prefs;
     private final int id;
@@ -15,7 +14,6 @@ public class Student {
     private Project assignedProject;
 
     public Student(String name, int id){
-        //this.rank = rank;
         this.id = id;
         this.name = name;
         this.assignedProject = null;
@@ -25,10 +23,12 @@ public class Student {
         this.rank = rank;
     }
 
-    public LinkedList<Project> initializePrefs(HashMap<Integer, Project> projectMap){
+    public LinkedList<Project> initializePrefs(HashMap<Integer, Project> projectMap, int[] rank){
+        this.rank = rank;
+        this.prefs = new LinkedList<>();
         for (int i = 0; i < this.rank.length; i++) {
             //this.prefs.addFirst(this.rank[i]);
-            this.prefs.addFirst(projectMap.get(i));
+            this.prefs.add(projectMap.get(i));
         }
         return this.prefs;
     }

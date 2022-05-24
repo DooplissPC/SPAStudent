@@ -18,7 +18,9 @@ public class Lecturer {
         this.id = id;
         this.name = name;
     }
-    public ArrayList<Student> initializePrefs(HashMap<Integer, Student> projectMap) {
+    public ArrayList<Student> initializePrefs(HashMap<Integer, Student> projectMap, int[] rank) {
+        this.prefs = new ArrayList<>();
+        this.rank=rank;
         for (int i = 0; i < this.rank.length; i++) {
             this.prefs.add(projectMap.get(i));
         }
@@ -81,6 +83,14 @@ public class Lecturer {
     }
     public void setRank ( int[] rank){
         this.rank = rank;
+    }
+
+    public int[] getRank() {
+        return rank;
+    }
+
+    public int getMaxCapacity() {
+        return maxCapacity;
     }
 
     public void setName (String name){

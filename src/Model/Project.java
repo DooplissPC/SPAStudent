@@ -11,13 +11,14 @@ import java.util.ListIterator;
  */
 public class Project {
     private ArrayList<Student> projectedPrefs;
-    private Lecturer lecturer;
-    private int lecturerId;
+    private final Lecturer lecturer;
+    private final int lecturerId;
     private final int id;
     private int capacity;
     private int maxCapacity;
     private String name;
     public Project(String name, int id, int maxCapacity, int lecturerId, HashMap<Integer, Lecturer> lecturerMap) {
+
         this.lecturerId = lecturerId;
         this.lecturer = lecturerMap.get(this.lecturerId);
         this.id = id;
@@ -28,13 +29,13 @@ public class Project {
 
     public void initializeProjectedPrefs() {
         ArrayList<Student> rank = this.lecturer.getPrefs();
+        this.projectedPrefs = new ArrayList<>();
         Project p = this;
         for (Student student : rank) {
             if(student.getPrefs().contains(p)){
                 this.projectedPrefs.add(student);
             }
         }
-        //this.lastStudent = this.projectedPrefs.size()-1;
     }
     public void assignStudent(Student student) {//if false, lecturer is full
         this.capacity++;
